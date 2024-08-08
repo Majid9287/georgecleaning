@@ -113,8 +113,8 @@ export default function Home() {
                         Customer Satisfaction
                       </h3>
                       <p className="text-white">
-                        We prioritize our customers' happiness.
-                      </p>
+  We prioritize our customers&#39; happiness.
+</p>
                     </div>
                   </div>
                 </div>
