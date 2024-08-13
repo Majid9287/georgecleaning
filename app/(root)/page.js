@@ -4,6 +4,7 @@ import Cycle from "@components/Cycle";
 import styles from "../Home.module.css";
 import { FaBroom, FaCheckCircle, FaThumbsUp } from "react-icons/fa";
 export default function Home() {
+  
   const items = [
     {
       title: "Item 1",
@@ -32,7 +33,7 @@ export default function Home() {
     <main className="min-h-screen bg-gray-100">
       <section className="bg-[#fcc707]  pt-24 relative">
         <div className="absolute top-0 left-0 w-0 h-0 border-r-[150px] md:border-r-[200px] border-r-transparent border-t-[150px] md:border-t-[200px] border-t-[#453ee3]"></div>
-        <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[200px] border-l-transparent border-b-[200px] border-b-[#453ee3]"></div>
+        <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[150px] md:border-l-[200px] border-l-transparent border-b-[150px] md:border-b-[200px] border-b-[#453ee3]"></div>
 
         <div className=" flex items-center">
           <div className="container mx-auto px-6">
@@ -113,8 +114,8 @@ export default function Home() {
                         Customer Satisfaction
                       </h3>
                       <p className="text-white">
-  We prioritize our customers&#39; happiness.
-</p>
+                        We prioritize our customers&#39; happiness.
+                      </p>
                     </div>
                   </div>
                 </div>
