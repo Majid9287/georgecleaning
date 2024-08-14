@@ -116,7 +116,7 @@ function Navbar({ isUserLoggedIn, isAdmin, isLogout, token }) {
                     router.pathname === "/portfolio" ? "text-black" : ""
                   }`}
                 >
-                  Portfolio
+                  Services
                 </Link>
               </li>
               <hr className="mx-4"></hr>
@@ -140,137 +140,11 @@ function Navbar({ isUserLoggedIn, isAdmin, isLogout, token }) {
                     router.pathname === "/course" ? "text-black" : ""
                   }`}
                 >
-                  Courses
+                  about
                 </Link>
               </li>
               <hr className="mx-4"></hr>
-              {loggedIn ? (
-                <>
-                  <div
-                    className={` ${isNavOpen ? " hidden " : "block"} lg:block`}
-                  >
-                    <li
-                      className="pl-10 relative  "
-                      onMouseLeave={handleDropdownToggle}
-                    >
-                      <button
-                        className=" flex items-center justify-center h-12 w-12 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none focus:shadow-outline"
-                        onMouseEnter={handleDropdownToggle}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          style={{ color: "#FFC107" }}
-                        >
-                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm6 2c0 1.1-.9 2-2 2h-8c-1.1 0-2-.9-2-2v-2c0-2.21 1.79-4 4-4h4c2.21 0 4 1.79 4 4v2z" />
-                        </svg>
-                      </button>
-                      {isDropdownOpen && (
-                        <ul
-                          onMouseLeave={handleDropdownToggle}
-                          className="absolute right-0  py-2 w-48 bg-white rounded-md shadow-xl z-50"
-                        >
-                          <li>
-                            <Link
-                              href="/profile"
-                              className="block  px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
-                            >
-                              Profile
-                            </Link>
-                          </li>
-                          {isAdmin ? (
-                            <li>
-                              <Link
-                                href="/admin"
-                                className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
-                              >
-                                Admin Dashboard
-                              </Link>
-                            </li>
-                          ) : (
-                            <li>
-                              <Link
-                                href="/enrollcourse"
-                                className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
-                              >
-                                Enrolled Course
-                              </Link>
-                            </li>
-                          )}
-                          <li>
-                            <button
-                              onClick={isLogout}
-                              className="block px-4 py-2 text-black hover:bg-indigo-500 hover:text-white w-full text-left"
-                            >
-                              Logout
-                            </button>
-                          </li>
-                        </ul>
-                      )}
-                    </li>
-                  </div>
-                  <div
-                    className={` ${
-                      isNavOpen ? " block  " : "hidden"
-                    } lg:hidden`}
-                  >
-                    <hr className="mx-4" />
-                    <li className="mr-3 py-3">
-                      <Link
-                        href="/profile"
-                        onClick={handleNavToggle}
-                        className="no-underline font-bold py-2 px-4 inline-block "
-                      >
-                        Profile
-                      </Link>
-                    </li>
-                    <hr className="mx-4" />
-                    {isAdmin ? (
-                      <li className="py-3">
-                        <Link
-                          href="/admin"
-                          onClick={handleNavToggle}
-                          className="no-underline font-bold py-2 px-4 inline-block "
-                        >
-                          Admin Dashboard
-                        </Link>
-                      </li>
-                    ) : (
-                      <li className="py-3">
-                        <Link
-                          href="/enrollcourse"
-                          onClick={handleNavToggle}
-                          className="no-underline font-bold py-2 px-4 inline-block "
-                        >
-                          Enrolled Course
-                        </Link>
-                      </li>
-                    )}
-                    <hr className="mx-4" />
-                    <li className="pb-12 pt-5">
-                      {" "}
-                      <button
-                        onClick={isLogout}
-                        className="no-underline text-black font-bold py-2 px-4 inline-block bg-white  rounded-full hover:bg-gray-200"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </div>
-                </>
-              ) : (
-                <li className="mr-3 my-2  ">
-                  <Link
-                    href="/signin"
-                    onClick={handleNavToggle}
-                    className=" text-black  no-underline font-bold py-2 px-4 inline-block bg-white  rounded-full hover:bg-gray-200"
-                  >
-                    Log in
-                  </Link>
-                </li>
-              )}
-            </ul>
+             </ul>
           </di>
         </div>
       </nav>

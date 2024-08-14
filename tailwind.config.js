@@ -12,6 +12,22 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      keyframes: {
+        customPulse: {
+          '0%': {
+            width: '0%',
+          },
+          '50%': {
+            width: '100%',
+          },
+          '100%': {
+            width: '0%',
+          },
+        },
+      },
+      animation: {
+        customPulse: 'customPulse 2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],

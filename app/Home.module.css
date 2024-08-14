@@ -15,3 +15,11 @@
     background-size: 10px 10px; 
    
 }
+
+.pattern1 {
+  
+    border-radius: 20%;
+    background: radial-gradient(circle, blue 10%, transparent 1%) repeat;
+    background-size: 10px 10px; 
+   
+}

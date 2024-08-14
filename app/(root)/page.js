@@ -2,9 +2,101 @@ import Image from "next/image";
 import Link from "next/link";
 import Cycle from "@components/Cycle";
 import styles from "../Home.module.css";
-import { FaBroom, FaCheckCircle, FaThumbsUp } from "react-icons/fa";
+import { FaBroom, FaThumbsUp, FaCheckCircle, FaShieldAlt } from "react-icons/fa";
+import { GiVacuumCleaner, GiModernCity } from "react-icons/gi";
+import { MdOutlineVerified, MdOutlinePriceCheck, MdOutlineSupportAgent } from "react-icons/md";
+import { FaStar } from "react-icons/fa";
 export default function Home() {
-  
+  const reviews = [
+    {
+      name: "Jane Doe",
+      title: "Outstanding Service",
+      review:
+        "The team was incredibly professional and thorough. My home has never looked better!",
+      rating: 5,
+      img: "/user1.jpg",
+    },
+    {
+      name: "John Smith",
+      title: "Highly Recommended",
+      review:
+        "Affordable pricing and top-notch service. I would definitely recommend them to my friends.",
+      rating: 5,
+      img: "/user2.jpg",
+    },
+    {
+      name: "Emily Clark",
+      title: "Impressive Work",
+      review:
+        "Their attention to detail is impressive. They left no stone unturned.",
+      rating: 4,
+      img: "/user3.jpg",
+    },
+  ];
+
+  const points = [
+    {
+      icon: <GiModernCity className="text-2xl text-[#fcc707] mr-2" />,
+      description: "Vetted and background-checked in house staff",
+    },
+    {
+      icon: <GiVacuumCleaner className="text-2xl text-[#fcc707] mr-2" />,
+      description: "High-Tech and Most Advanced Equipment",
+    },
+    {
+      icon: <FaShieldAlt className="text-2xl text-[#fcc707] mr-2" />,
+      description: "Quality Control and Safety",
+    },
+    {
+      icon: <MdOutlinePriceCheck className="text-2xl text-[#fcc707] mr-2" />,
+      description: "Affordable and Upfront Pricing",
+    },
+    {
+      icon: <MdOutlineSupportAgent className="text-2xl text-[#fcc707] mr-2" />,
+      description: "Timely and Convenient Services",
+    },
+    {
+      icon: <MdOutlineVerified className="text-2xl text-[#fcc707] mr-2" />,
+      description: "Experienced, Trained and Certified",
+    },
+    {
+      icon: <FaCheckCircle className="text-2xl text-[#fcc707] mr-2" />,
+      description: "Post Service Guarantee",
+    },
+  ];
+
+  const services = [
+    {
+      title: "Office Cleaning",
+      description: "Thorough cleaning for your office, ensuring a healthy work environment.",
+      img: "/office.png",
+      link: "/book/office-cleaning",
+    },
+    {
+      title: "Carpet Cleaning",
+      description: "Expert carpet cleaning to remove dirt, stains, and allergens.",
+      img: "/carpet.png",
+      link: "/book/carpet-cleaning",
+    },
+    {
+      title: "Home Cleaning",
+      description: "Complete home cleaning services for a spotless living space.",
+      img: "/hous.png",
+      link: "/book/home-cleaning",
+    },
+    {
+      title: "Kitchen Cleaning",
+      description: "Deep kitchen cleaning to maintain a hygienic cooking area.",
+      img: "/kitchen.png",
+      link: "/book/kitchen-cleaning",
+    },
+    {
+      title: "Window Cleaning",
+      description: "Streak-free window cleaning for crystal clear views.",
+      img: "/window.png",
+      link: "/book/window-cleaning",
+    },
+  ];
   const items = [
     {
       title: "Item 1",
@@ -132,6 +224,124 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section id="services" className="py-16 bg-gray-100">
+      <div className="container mx-auto px-6 ">
+      <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">
+      Recommended Services
+        </h2>
+        <p className="text-lg text-center text-gray-600 mb-12">
+        Services highly recommended by our valuable customers.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service, index) => (
+            <div key={index} className="relative group">
+              <div className="overflow-hidden rounded-lg shadow-lg w-full h-48 md:h-56">
+                <Image
+                  src={service.img}
+                  alt={service.title}
+                  width={600}
+                  height={400}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 animate-pulse bg-black bg-opacity-50 flex justify-center items-center group-hover:opacity-0 transition-opacity duration-300">
+                  <h3 className="text-xl md:text-2xl text-white font-semibold">
+                    {service.title}
+                  </h3>
+                </div>
+              </div>
+              <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-xl md:text-2xl text-white font-semibold mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-white mb-4 text-center px-4">
+                  {service.description}
+                </p>
+                <Link href={service.link} className="px-4 py-2 bg-[#fcc707] text-[#453ee3] font-semibold rounded-full shadow-lg hover:bg-white hover:text-[#453ee3] transition duration-300">
+                    Book Now
+                 
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
+    <section className="py-16 bg-gray-100">
+      <div className="container mx-auto flex flex-col md:flex-row items-center">
+        <div className=" relative w-full md:w-1/2 mb-8 md:mb-0">
+         {/* Top Left Decoration */}
+         <div className={`absolute top-0 left-6 w-16 h-16 md:w-24 md:h-24 bg-[#fcc707] z-0 transform -translate-x-4 -translate-y-4 md:-translate-x-8 md:-translate-y-8 rounded-full `}></div>
+          {/* Bottom Right Decoration */}
+          <div className="absolute bottom-0 right-6 w-16 h-16 md:w-24 md:h-24 bg-[#453ee3] z-0 transform translate-x-4 translate-y-4 md:translate-x-8 md:translate-y-8 rounded-full"></div>
+         
+          <Image
+            src="/choose.png"  // Replace with your image path
+            alt="Why Choose Us"
+            width={600}
+            height={400}
+            className={`z-50 ${styles.pattern1}`}
+          />
+        </div>
+        
+          <div className="w-full md:w-1/2 md:pl-12 ">
+            <h2 className="text-4xl font-bold text-gray-800 md:text-left  mb-4 p-2">Why Choose Us?</h2>
+            <p className="text-lg text-gray-600 md:text-left mb-1 p-4">
+              We offer unmatched service quality, reliability, and customer satisfaction. Here’s why you should choose us for your cleaning needs:
+            </p>
+            <div className="space-y-4 p-2">
+              {points.map((point, index) => (
+                <div key={index} className="flex items-start">
+                  <div>{point.icon}</div>
+                  <div>
+                    <p className="text-gray-600">{point.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+     
+    </section>
+
+    <section className="py-16 bg-white">
+      <div className="container mx-auto px-6">
+        <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">
+          What Our Customers Are Saying
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {reviews.map((review, index) => (
+            <div key={index} className="relative group">
+              <div className="overflow-hidden rounded-lg shadow-lg bg-[#453ee3] p-6">
+                <div className="flex items-center mb-4">
+                  <Image
+                    src={review.img}
+                    alt={review.name}
+                    width={50}
+                    height={50}
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <h3 className="text-xl text-[#fcc707] font-semibold">
+                      {review.name}
+                    </h3>
+                    <p className="text-sm text-white">{review.title}</p>
+                  </div>
+                </div>
+                <p className="text-white mb-4">{review.review}</p>
+                <div className="flex">
+                  {Array(review.rating)
+                    .fill("")
+                    .map((_, i) => (
+                      <FaStar key={i} className="text-[#fcc707] text-lg" />
+                    ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
     </main>
   );
 }
