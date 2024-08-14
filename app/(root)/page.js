@@ -130,7 +130,7 @@ export default function Home() {
         <div className=" flex items-center">
           <div className="container mx-auto px-6">
             <div className="flex flex-col md:flex-row items-center">
-              <div className="w-full md:w-1/2 text-center md:text-left">
+              <div className="w-full md:w-1/2 text-center md:text-left pt-8">
                 <h1 className="text-4xl md:text-6xl font-bold text-black leading-tight">
                   Sparkling Clean Homes, <br /> Happy Customers
                 </h1>
