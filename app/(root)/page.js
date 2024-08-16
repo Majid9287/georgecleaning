@@ -123,7 +123,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-100">
-      <section className="bg-[#fcc707]  pt-24 relative">
+      <section className="bg-[#fcc707]  pt-44 relative">
         <div className="absolute top-0 left-0 w-0 h-0 border-r-[150px] md:border-r-[200px] border-r-transparent border-t-[150px] md:border-t-[200px] border-t-[#453ee3]"></div>
         <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[150px] md:border-l-[200px] border-l-transparent border-b-[150px] md:border-b-[200px] border-b-[#453ee3]"></div>
 
@@ -131,7 +131,7 @@ export default function Home() {
           <div className="container mx-auto px-6">
             <div className="flex flex-col md:flex-row items-center">
               <div className="w-full md:w-1/2 text-center md:text-left pt-8">
-                <h1 className="text-4xl md:text-6xl font-bold text-black leading-tight">
+                <h1 className="text-4xl md:text-6xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-black leading-tight">
                   Sparkling Clean Homes, <br /> Happy Customers
                 </h1>
                 <p className="text-lg md:text-2xl text-black mt-6">
@@ -304,7 +304,7 @@ export default function Home() {
      
     </section>
 
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-gray-100">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">
           What Our Customers Are Saying
