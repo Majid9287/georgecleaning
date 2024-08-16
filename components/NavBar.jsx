@@ -133,12 +133,14 @@ const NavbarFour = () => {
         {/* Contact Information */}
         <div className="flex space-x-4">
           <div className="flex items-center " onClick={handlePhoneClick}>
-            <MdPhone className="h-6 w-6 text-blue-500 bg-white rounded-full p-1" />
-            <p className="ml-2 cursor-pointer">+123 456 7890</p>
+          <Link href=""
+             className="text-blue-500 bg-white rounded-full p-1"> <MdPhone className="h-6 w-6 " />
+           </Link> <p className="ml-2 cursor-pointer">+123 456 7890</p>
           </div>
           <div className=" items-center hidden md:flex" onClick={handleEmailClick}>
-            <MdEmail className="h-6 w-6  text-blue-500 bg-white rounded-full p-1" />
-            <p className="ml-2 cursor-pointer">example@email.com</p>
+          <Link href=""
+             className="text-blue-500 bg-white rounded-full p-1">  <MdEmail className="h-6 w-6  " />
+            </Link><p className="ml-2 cursor-pointer">example@email.com</p>
           </div>
         </div>
       </div>
