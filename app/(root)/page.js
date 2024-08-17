@@ -1,18 +1,43 @@
+"use client";
+
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Cycle from "@components/Cycle";
+import ReviewCard from "@components/cards/ReviewCard";
 import styles from "../Home.module.css";
-import { FaBroom, FaThumbsUp, FaCheckCircle, FaShieldAlt } from "react-icons/fa";
+import { FaLock, FaSoap, FaStar } from "react-icons/fa";
+import { FaShield } from "react-icons/fa6";
+import {
+  FaTools,
+  FaMagnifyingGlass,
+  FaSmile,
+  FaBroom,
+  FaThumbsUp,
+  FaCheckCircle,
+  FaShieldAlt,
+} from "react-icons/fa";
 import { GiVacuumCleaner, GiModernCity } from "react-icons/gi";
-import { MdOutlineVerified, MdOutlinePriceCheck, MdOutlineSupportAgent } from "react-icons/md";
-import { FaStar } from "react-icons/fa";
+import {
+  MdOutlineVerified,
+  MdOutlinePriceCheck,
+  MdOutlineSupportAgent,
+} from "react-icons/md";
+
 export default function Home() {
   const reviews = [
     {
       name: "Jane Doe",
       title: "Outstanding Service",
       review:
-        "The team was incredibly professional and thorough. My home has never looked better!",
+        "The team was incredibly professional and thorough. My home has never looked better! The team was incredibly professional and thorough. My home has never looked better!The team was incredibly professional and thorough. My home has never looked better!",
+      rating: 5,
+      img: "/user1.jpg",
+    },
+    {
+      name: "Jane Doe",
+      title: "Outstanding Service",
+      review: "]My home has never looked better!",
       rating: 5,
       img: "/user1.jpg",
     },
@@ -68,19 +93,22 @@ export default function Home() {
   const services = [
     {
       title: "Office Cleaning",
-      description: "Thorough cleaning for your office, ensuring a healthy work environment.",
+      description:
+        "Thorough cleaning for your office, ensuring a healthy work environment.",
       img: "/office.png",
       link: "/book/office-cleaning",
     },
     {
       title: "Carpet Cleaning",
-      description: "Expert carpet cleaning to remove dirt, stains, and allergens.",
+      description:
+        "Expert carpet cleaning to remove dirt, stains, and allergens.",
       img: "/carpet.png",
       link: "/book/carpet-cleaning",
     },
     {
       title: "Home Cleaning",
-      description: "Complete home cleaning services for a spotless living space.",
+      description:
+        "Complete home cleaning services for a spotless living space.",
       img: "/hous.png",
       link: "/book/home-cleaning",
     },
@@ -131,7 +159,7 @@ export default function Home() {
           <div className="container mx-auto px-6">
             <div className="flex flex-col md:flex-row items-center">
               <div className="w-full md:w-1/2 text-center md:text-left pt-8">
-                <h1 className="text-4xl md:text-6xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] text-black leading-tight">
+                <h1 className="text-4xl md:text-6xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0)] text-black leading-tight">
                   Sparkling Clean Homes, <br /> Happy Customers
                 </h1>
                 <p className="text-lg md:text-2xl text-black mt-6">
@@ -225,69 +253,77 @@ export default function Home() {
         </div>
       </section>
       <section id="services" className="py-16 bg-gray-100">
-      <div className="container mx-auto px-6 ">
-      <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">
-      Recommended Services
-        </h2>
-        <p className="text-lg text-center text-gray-600 mb-12">
-        Services highly recommended by our valuable customers.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div key={index} className="relative group">
-              <div className="overflow-hidden rounded-lg shadow-lg w-full h-48 md:h-56">
-                <Image
-                  src={service.img}
-                  alt={service.title}
-                  width={600}
-                  height={400}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 animate-pulse bg-black bg-opacity-50 flex justify-center items-center group-hover:opacity-0 transition-opacity duration-300">
-                  <h3 className="text-xl md:text-2xl text-white font-semibold">
+        <div className="container mx-auto px-6 ">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">
+            Recommended Services
+          </h2>
+          <p className="text-lg text-center text-gray-600 mb-12">
+            Services highly recommended by our valuable customers.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+              <div key={index} className="relative group">
+                <div className="overflow-hidden rounded-lg shadow-lg w-full h-48 md:h-56">
+                  <Image
+                    src={service.img}
+                    alt={service.title}
+                    width={600}
+                    height={400}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 animate-pulse bg-black bg-opacity-50 flex justify-center items-center group-hover:opacity-0 transition-opacity duration-300">
+                    <h3 className="text-xl md:text-2xl text-white font-semibold">
+                      {service.title}
+                    </h3>
+                  </div>
+                </div>
+                <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <h3 className="text-xl md:text-2xl text-white font-semibold mb-2">
                     {service.title}
                   </h3>
+                  <p className="text-white mb-4 text-center px-4">
+                    {service.description}
+                  </p>
+                  <Link
+                    href={service.link}
+                    className="px-4 py-2 bg-[#fcc707] text-[#453ee3] font-semibold rounded-full shadow-lg hover:bg-white hover:text-[#453ee3] transition duration-300"
+                  >
+                    Book Now
+                  </Link>
                 </div>
               </div>
-              <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h3 className="text-xl md:text-2xl text-white font-semibold mb-2">
-                  {service.title}
-                </h3>
-                <p className="text-white mb-4 text-center px-4">
-                  {service.description}
-                </p>
-                <Link href={service.link} className="px-4 py-2 bg-[#fcc707] text-[#453ee3] font-semibold rounded-full shadow-lg hover:bg-white hover:text-[#453ee3] transition duration-300">
-                    Book Now
-                 
-                </Link>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
+      <section className="py-16 bg-gray-100">
+        <div className="container mx-auto flex flex-col md:flex-row items-center">
+          <div className=" relative w-full md:w-1/2 mb-8 md:mb-0">
+            {/* Top Left Decoration */}
+            <div
+              className={`absolute top-0 left-6 w-16 h-16 md:w-24 md:h-24 bg-[#fcc707] z-0 transform -translate-x-4 -translate-y-4 md:-translate-x-8 md:-translate-y-8 rounded-full `}
+            ></div>
+            {/* Bottom Right Decoration */}
+            <div className="absolute bottom-0 right-6 w-16 h-16 md:w-24 md:h-24 bg-[#453ee3] z-0 transform translate-x-4 translate-y-4 md:translate-x-8 md:translate-y-8 rounded-full"></div>
 
-    <section className="py-16 bg-gray-100">
-      <div className="container mx-auto flex flex-col md:flex-row items-center">
-        <div className=" relative w-full md:w-1/2 mb-8 md:mb-0">
-         {/* Top Left Decoration */}
-         <div className={`absolute top-0 left-6 w-16 h-16 md:w-24 md:h-24 bg-[#fcc707] z-0 transform -translate-x-4 -translate-y-4 md:-translate-x-8 md:-translate-y-8 rounded-full `}></div>
-          {/* Bottom Right Decoration */}
-          <div className="absolute bottom-0 right-6 w-16 h-16 md:w-24 md:h-24 bg-[#453ee3] z-0 transform translate-x-4 translate-y-4 md:translate-x-8 md:translate-y-8 rounded-full"></div>
-         
-          <Image
-            src="/choose.png"  // Replace with your image path
-            alt="Why Choose Us"
-            width={600}
-            height={400}
-            className={`z-50 ${styles.pattern1}`}
-          />
-        </div>
-        
+            <Image
+              src="/choose.png" // Replace with your image path
+              alt="Why Choose Us"
+              width={600}
+              height={400}
+              className={`z-50 ${styles.pattern1}`}
+            />
+          </div>
+
           <div className="w-full md:w-1/2 md:pl-12 ">
-            <h2 className="text-4xl font-bold text-gray-800 md:text-left  mb-4 p-2">Why Choose Us?</h2>
+            <h2 className="text-4xl font-bold text-gray-800 md:text-left  mb-4 p-2">
+              Why Choose Us?
+            </h2>
             <p className="text-lg text-gray-600 md:text-left mb-1 p-4">
-              We offer unmatched service quality, reliability, and customer satisfaction. Here’s why you should choose us for your cleaning needs:
+              We offer unmatched service quality, reliability, and customer
+              satisfaction. Here’s why you should choose us for your cleaning
+              needs:
             </p>
             <div className="space-y-4 p-2">
               {points.map((point, index) => (
@@ -301,47 +337,196 @@ export default function Home() {
             </div>
           </div>
         </div>
-     
-    </section>
+      </section>
 
-    <section className="py-16 bg-gray-100">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          What Our Customers Are Saying
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {reviews.map((review, index) => (
-            <div key={index} className="relative group">
-              <div className="overflow-hidden rounded-lg shadow-lg bg-[#453ee3] p-6">
-                <div className="flex items-center mb-4">
-                  <Image
-                    src={review.img}
-                    alt={review.name}
-                    width={50}
-                    height={50}
-                    className="w-12 h-12 rounded-full object-cover mr-4"
-                  />
-                  <div>
-                    <h3 className="text-xl text-[#fcc707] font-semibold">
-                      {review.name}
-                    </h3>
-                    <p className="text-sm text-white">{review.title}</p>
-                  </div>
-                </div>
-                <p className="text-white mb-4">{review.review}</p>
-                <div className="flex">
-                  {Array(review.rating)
-                    .fill("")
-                    .map((_, i) => (
-                      <FaStar key={i} className="text-[#fcc707] text-lg" />
-                    ))}
+      <section className="max-w-screen-lg mx-auto justify-center pt-16">
+        <div className="flex justify-center pb-2">
+          <span className="border rounded-full border-black  flex justify-center p-2  text-green-500">
+            <FaCheckCircle className="text-[#453ee3] text-2xl" />
+          </span>
+        </div>
+        <h1 className="text-3xl font-bold text-center  text-black">
+          Experience Our <span className="text-[#453ee3]">Cleaning Magic</span>
+        </h1>
+        <div className="flex justify-center  text-[#453ee3]">
+          <div class="flex justify-center">
+            <div class=" border-[#453ee3] ">....................</div>
+          </div>
+        </div>
+        <div className="space-y-6 px-2 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:ml-[1.25rem] md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-[#fcc707] before:to-transparent">
+          <div className="relative">
+            <div className="flex items-center md:space-x-4 mb-3 ">
+              <div className="">
+                <div className=" flex items-center  justify-center bg-[#453ee3] w-10 h-10 rounded-full shadow md:order-1">
+                  <FaLock className="text-lg text-[#fcc707] " />
                 </div>
               </div>
+
+              <div className="text-slate-500 ml-4 md:ml-14">
+                <span className="text-slate-900 font-bold">
+                  Step 1: Secure Consultation
+                </span>{" "}
+              </div>
             </div>
-          ))}
+            <div className="md:flex">
+              <div className="    text-slate-500  ml-14  md:w-3/4">
+                <p>
+                  We begin by carefully evaluating your space and discussing
+                  your privacy concerns. Our goal is to create a customized
+                  cleaning plan that meets your specific needs while ensuring
+                  the utmost security and discretion.
+                </p>
+              </div>
+              <div className="flex-shrink-0 ml-auto  md:w-1/4 px-12">
+                <img
+                  src="/one.png"
+                  alt="Secure Consultation"
+                  className=" h-40 w-40 md:h-full md:w-full object-contain"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="flex items-center md:space-x-4 mb-3">
+              <div className=" ">
+                <div className=" flex items-center justify-center bg-[#453ee3] w-10 h-10 rounded-full shadow md:order-1">
+                  <FaShield className="text-lg text-[#fcc707] " />
+                </div>
+              </div>
+
+              <div className="text-slate-500 ml-4 md:ml-14">
+                <span className="text-slate-900 font-bold">
+                  Step 2: Safe Preparation
+                </span>{" "}
+              </div>
+            </div>
+            <div className="md:flex">
+              <div className="text-slate-500  ml-14  md:w-3/4">
+                <p>
+                  Our team prepares for the cleaning by gathering the necessary
+                  equipment, supplies, and cleaning solutions. We prioritize
+                  security measures to protect your belongings and maintain
+                  confidentiality.
+                </p>
+              </div>
+              <div className="flex-shrink-0 ml-auto md:w-1/4 px-12">
+                <img
+                  src="/two.png"
+                  alt="Safe Preparation"
+                  className=" h-40 w-40 md:h-full md:w-full object-contain"
+                />
+              </div>{" "}
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="flex items-center md:space-x-4 mb-3">
+              <div className=" ">
+                <div className=" flex items-center justify-center bg-[#453ee3] w-10 h-10 rounded-full shadow md:order-1">
+                  <FaSoap className="text-lg text-[#fcc707] " />
+                </div>
+              </div>
+
+              <div className="text-slate-500 ml-4 md:ml-14">
+                <span className="text-slate-900 font-bold">
+                  Step 3: Deep Cleanse
+                </span>{" "}
+              </div>
+            </div>
+            <div className="md:flex">
+              <div className="text-slate-500  ml-14  md:w-3/4">
+                <p>
+                  We meticulously clean every nook and cranny of your space
+                  using safe and effective cleaning products. Our focus on
+                  hygiene ensures a healthy environment for you and your family.
+                </p>
+              </div>
+              <div className="flex-shrink-0 ml-auto md:w-1/4 px-12">
+                <img
+                  src="/three.png"
+                  alt="Deep Cleanse"
+                  className=" h-40 w-40 md:h-full md:w-full object-contain"
+                />
+              </div>{" "}
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="flex items-center md:space-x-4 mb-3">
+              <div className=" ">
+                <div className=" flex items-center justify-center bg-[#453ee3] w-10 h-10 rounded-full shadow md:order-1">
+                  <FaCheckCircle className="text-lg text-[#fcc707] " />
+                </div>
+              </div>
+
+              <div className="text-slate-500 ml-4 md:ml-14">
+                <span className="text-slate-900 font-bold">
+                  Step 4: Rigorous Verification
+                </span>{" "}
+              </div>
+            </div>
+            <div className="md:flex">
+              <div className="text-slate-500  ml-14  md:w-3/4">
+                <p>
+                  We conduct a thorough inspection to guarantee our high
+                  cleaning standards. We also perform a security check to verify
+                  that all valuables and personal items are safe and accounted
+                  for.
+                </p>
+              </div>
+              <div className="flex-shrink-0 ml-auto md:w-1/4 px-12">
+                <img
+                  src="/four.png"
+                  alt="Rigorous Verification"
+                  className="h-40 w-40 md:h-full md:w-full object-contain"
+                />
+              </div>{" "}
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="flex items-center md:space-x-4 mb-3">
+              <div className=" ">
+                <div className=" flex items-center justify-center bg-[#453ee3] w-10 h-10 rounded-full shadow md:order-1">
+                  <FaStar className="text-lg text-[#fcc707] " />
+                </div>
+              </div>
+
+              <div className="text-slate-500 ml-4 md:ml-14">
+                <span className="text-slate-900 font-bold">
+                  Step 5: Final Refresh
+                </span>{" "}
+              </div>
+            </div>
+            <div className="md:flex">
+              <div className="text-slate-500  ml-14  md:w-3/4">
+                <p>
+                  We add the finishing touches to create a fresh and inviting
+                  space. Upon completion, we ensure your home or office is left
+                  in pristine condition and securely locked before departing
+                </p>
+              </div>
+              <div className="flex-shrink-0 ml-auto md:w-1/4 px-12">
+                <img
+                  src="/five.png"
+                  alt="Final Refresh"
+                  className="h-40 w-40 md:h-full md:w-full object-contain"
+                />
+              </div>{" "}
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="py-16 bg-gray-100">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">
+            What Our Customers Are Saying
+          </h2>
+          <ReviewCard reviews={reviews} />
+        </div>
+      </section>
     </main>
   );
 }
