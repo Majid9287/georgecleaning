@@ -7,6 +7,22 @@
     align-items: center;
     overflow: hidden;
 }
+.patternSection1 {
+    width: 100%;
+  height: 50%;
+  background-color: #453ee3; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.pattern2 {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, yellow 10%, transparent 1%) repeat;
+    background-size: 10px 10px; 
+   
+}
 
 .pattern {
     width: 100%;

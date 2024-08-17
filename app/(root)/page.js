@@ -518,6 +518,31 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="relative bg-gray-900 py-16 sm:py-24">
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[#453ee3] opacity-75"></div>
+        <div className={styles.pattern2}><div className="relative h-full w-full">
+          
+        </div></div>
+      </div>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 className="text-4xl font-extrabold text-white sm:text-5xl">
+          Book Our Service & Get a Quote
+        </h2>
+        <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
+          Discover unparalleled service quality. Click below to request your quote and let us help you make your vision a reality!
+        </p>
+        <div className="mt-8">
+          <button
+            className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transform transition hover:scale-105"
+          >
+            Get a Quote
+          </button>
+        </div>
+      </div>
+    </section>
+
+    
 
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-6">
