@@ -3,8 +3,8 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Cycle from "@components/Cycle";
-import ReviewCard from "@components/cards/ReviewCard";
+import Cycle from "/components/Cycle";
+import ReviewCard from "/components/cards/ReviewCard";
 import styles from "../Home.module.css";
 import { FaLock, FaSoap, FaStar } from "react-icons/fa";
 import { FaShield } from "react-icons/fa6";
@@ -533,11 +533,13 @@ export default function Home() {
           Discover unparalleled service quality. Click below to request your quote and let us help you make your vision a reality!
         </p>
         <div className="mt-8">
+          <Link href={"/book-now"}>
+         
           <button
             className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transform transition hover:scale-105"
           >
             Get a Quote
-          </button>
+          </button> </Link>
         </div>
       </div>
     </section>

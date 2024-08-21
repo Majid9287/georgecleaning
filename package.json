@@ -9,15 +9,27 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.633.0",
+    "@aws-sdk/s3-request-presigner": "^3.633.0",
+    "@tinymce/tinymce-react": "^5.1.1",
+    "aws-sdk": "^2.1678.0",
+    "axios": "^1.7.4",
     "classnames": "^2.5.1",
+    "mongoose": "^8.5.3",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
+    "react-loading-skeleton": "^3.4.0",
     "react-swiper": "^0.1.5",
-    "swiper": "^11.1.9"
+    "react-toastify": "^10.0.5",
+    "slugify": "^1.6.6",
+    "swiper": "^11.1.9",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@types/node": "22.4.2",
+    "@types/react": "18.3.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
