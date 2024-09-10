@@ -15,14 +15,22 @@ async function getService(slug) {
 }
 
 export async function generateStaticParams() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}}/api/service`, {
     next: { revalidate: 60 },
   });
-  const services = await res.json();
-
-  return services.posts?.map((service) => ({
-    slug: service.slug,
-  }));
+  if (!res.ok) {
+    console.error("Failed to fetch services:", res.status, res.statusText);
+    return [];
+  }
+  try {
+    const services = await res.json();
+    return services.posts?.map((service) => ({
+      slug: service.slug,
+    }));
+  } catch (err) {
+    console.error("Error parsing JSON response:", err);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }) {
