@@ -7,7 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 async function getService(slug) {
-  const res = await fetch(`${API_BASE_URL}/api/service/${slug}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service/${slug}`);
   const service = await res.json();
 
   if (!service) notFound();
@@ -15,7 +15,7 @@ async function getService(slug) {
 }
 
 export async function generateStaticParams() {
-  const res = await fetch(`${API_BASE_URL}/api/service`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service`, {
     next: { revalidate: 60 },
   });
   const services = await res.json();
