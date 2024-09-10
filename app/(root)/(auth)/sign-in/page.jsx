@@ -19,7 +19,7 @@ const SignIn = () => {
           Sign in with Google
         </button>
         <div className="mt-8 text-center">
-          <p className="text-gray-600">Don't have an account? <a href="/sign-up" className="text-indigo-600 font-bold hover:underline">Sign up here</a></p>
+          <p className="text-gray-600">Don not have an account? <a href="/sign-up" className="text-indigo-600 font-bold hover:underline">Sign up here</a></p>
         </div>
       </div>
     </div>
