@@ -1,12 +1,11 @@
-"use client";
 
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Cycle from "/components/Cycle";
 import ReviewCard from "/components/cards/ReviewCard";
 import styles from "../Home.module.css";
 import { FaLock, FaSoap, FaStar } from "react-icons/fa";
+import ServiceCard from "@components/cards/ServiceCard";
 import { FaShield } from "react-icons/fa6";
 import {
   FaTools,
@@ -24,7 +23,7 @@ import {
   MdOutlineSupportAgent,
 } from "react-icons/md";
 
-export default function Home() {
+export default async function Home() {
   const reviews = [
     {
       name: "Jane Doe",
@@ -34,13 +33,7 @@ export default function Home() {
       rating: 5,
       img: "/user1.jpg",
     },
-    {
-      name: "Jane Doe",
-      title: "Outstanding Service",
-      review: "]My home has never looked better!",
-      rating: 5,
-      img: "/user1.jpg",
-    },
+
     {
       name: "John Smith",
       title: "Highly Recommended",
@@ -58,7 +51,29 @@ export default function Home() {
       img: "/user3.jpg",
     },
   ];
-
+  const items = [
+    {
+      title: "Item 1",
+      description: "Description 1",
+      img: "/office.png",
+    },
+    { title: "Item 2", description: "Description 2", img: "/carpet.png" },
+    {
+      title: "Item 3",
+      description: "Description 3",
+      img: "/hous.png",
+    },
+    {
+      title: "Item 4",
+      description: "Description 4",
+      img: "/kitchen.png",
+    },
+    {
+      title: "Item 5",
+      description: "Description 5",
+      img: "/window.png",
+    },
+  ];
   const points = [
     {
       icon: <GiModernCity className="text-2xl text-[#fcc707] mr-2" />,
@@ -89,66 +104,11 @@ export default function Home() {
       description: "Post Service Guarantee",
     },
   ];
-
-  const services = [
-    {
-      title: "Office Cleaning",
-      description:
-        "Thorough cleaning for your office, ensuring a healthy work environment.",
-      img: "/office.png",
-      link: "/book/office-cleaning",
-    },
-    {
-      title: "Carpet Cleaning",
-      description:
-        "Expert carpet cleaning to remove dirt, stains, and allergens.",
-      img: "/carpet.png",
-      link: "/book/carpet-cleaning",
-    },
-    {
-      title: "Home Cleaning",
-      description:
-        "Complete home cleaning services for a spotless living space.",
-      img: "/hous.png",
-      link: "/book/home-cleaning",
-    },
-    {
-      title: "Kitchen Cleaning",
-      description: "Deep kitchen cleaning to maintain a hygienic cooking area.",
-      img: "/kitchen.png",
-      link: "/book/kitchen-cleaning",
-    },
-    {
-      title: "Window Cleaning",
-      description: "Streak-free window cleaning for crystal clear views.",
-      img: "/window.png",
-      link: "/book/window-cleaning",
-    },
-  ];
-  const items = [
-    {
-      title: "Item 1",
-      description: "Description 1",
-      img: "/office.png",
-    },
-    { title: "Item 2", description: "Description 2", img: "/carpet.png" },
-    {
-      title: "Item 3",
-      description: "Description 3",
-      img: "/hous.png",
-    },
-    {
-      title: "Item 4",
-      description: "Description 4",
-      img: "/kitchen.png",
-    },
-    {
-      title: "Item 5",
-      description: "Description 5",
-      img: "/window.png",
-    },
-  ];
-
+  const res = await fetch("http://localhost:3000/api/service", {
+    next: { revalidate: 7200 },
+  });
+  const data = await res.json();
+  const services = data.posts;
   return (
     <main className="min-h-screen bg-gray-100">
       <section className="bg-[#fcc707]  pt-44 relative">
@@ -174,6 +134,13 @@ export default function Home() {
                     See Our Best Offer
                   </button>{" "}
                 </Link>
+                <Link href="/book-now">
+                  <button className="mt-4 px-8 py-3 bg-white text-[#453ee3] font-semibold rounded-full shadow-lg hover:bg-[#fcc707] hover:text-white transition duration-300">
+                    {" "}
+                    Get a Quote
+                  </button>{" "}
+                </Link>
+                
               </div>
               <div className="w-full md:w-1/2 flex  mt-8 md:mt-0">
                 <Image
@@ -261,38 +228,11 @@ export default function Home() {
             Services highly recommended by our valuable customers.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="relative group">
-                <div className="overflow-hidden rounded-lg shadow-lg w-full h-48 md:h-56">
-                  <Image
-                    src={service.img}
-                    alt={service.title}
-                    width={600}
-                    height={400}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 animate-pulse bg-black bg-opacity-50 flex justify-center items-center group-hover:opacity-0 transition-opacity duration-300">
-                    <h3 className="text-xl md:text-2xl text-white font-semibold">
-                      {service.title}
-                    </h3>
-                  </div>
-                </div>
-                <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <h3 className="text-xl md:text-2xl text-white font-semibold mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-white mb-4 text-center px-4">
-                    {service.description}
-                  </p>
-                  <Link
-                    href={service.link}
-                    className="px-4 py-2 bg-[#fcc707] text-[#453ee3] font-semibold rounded-full shadow-lg hover:bg-white hover:text-[#453ee3] transition duration-300"
-                  >
-                    Book Now
-                  </Link>
-                </div>
-              </div>
-            ))}
+            {services &&
+              services.length > 0 &&
+              services.map((service, index) => (
+                <ServiceCard key={index} service={service} />
+              ))}
           </div>
         </div>
       </section>
@@ -349,8 +289,8 @@ export default function Home() {
           Experience Our <span className="text-[#453ee3]">Cleaning Magic</span>
         </h1>
         <div className="flex justify-center  text-[#453ee3]">
-          <div class="flex justify-center">
-            <div class=" border-[#453ee3] ">....................</div>
+          <div className="flex justify-center">
+            <div className=" border-[#453ee3] ">....................</div>
           </div>
         </div>
         <div className="space-y-6 px-2 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:ml-[1.25rem] md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-[#fcc707] before:to-transparent">
@@ -519,32 +459,29 @@ export default function Home() {
         </div>
       </section>
       <section className="relative bg-gray-900 py-16 sm:py-24">
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[#453ee3] opacity-75"></div>
-        <div className={styles.pattern2}><div className="relative h-full w-full">
-          
-        </div></div>
-      </div>
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-4xl font-extrabold text-white sm:text-5xl">
-          Book Our Service & Get a Quote
-        </h2>
-        <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
-          Discover unparalleled service quality. Click below to request your quote and let us help you make your vision a reality!
-        </p>
-        <div className="mt-8">
-          <Link href={"/book-now"}>
-         
-          <button
-            className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transform transition hover:scale-105"
-          >
-            Get a Quote
-          </button> </Link>
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[#453ee3] opacity-75"></div>
+          <div className={styles.pattern2}>
+            <div className="relative h-full w-full"></div>
+          </div>
         </div>
-      </div>
-    </section>
-
-    
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-extrabold text-white sm:text-5xl">
+            Book Our Service & Get a Quote
+          </h2>
+          <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
+            Discover unparalleled service quality. Click below to request your
+            quote and let us help you make your vision a reality!
+          </p>
+          <div className="mt-8">
+            <Link href={"/book-now"}>
+              <button className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg transform transition hover:scale-105">
+                Get a Quote
+              </button>{" "}
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-6">

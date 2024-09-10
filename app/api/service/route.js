@@ -1,4 +1,4 @@
-// pages/api/service/index.js
+// app/api/service/route.js
 
 import { connectToDB } from "@lib/mongodb/mongoose";
 import Post from "@lib/models/Service";
@@ -7,34 +7,30 @@ export const GET = async (req) => {
   try {
     // Connect to the database
     await connectToDB();
-
-    // Extract query parameters
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const page = parseInt(url.searchParams.get("page")) || 1;
-    const limit = parseInt(url.searchParams.get("limit")) || 15;
-
-    // Calculate the number of documents to skip
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get('page')) || 1; // Default to page 1
+    const limit = parseInt(url.searchParams.get('limit')) || 10; // Default to 10 items per page
     const skip = (page - 1) * limit;
+    
 
-    // Fetch the paginated posts
-    const posts = await Post.find(
-      {},
-      "slug title description price status feature_img"
-    )
-      .skip(skip)
-      .limit(limit)
-      .exec();
+  
 
-    // Get the total count of documents for pagination info
-    const totalDocuments = await Post.countDocuments();
+    // Fetch paginated posts
+    const [posts, total] = await Promise.all([
+      Post.find({}, "slug title description price status feature_img")
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      Post.countDocuments({})
+    ]);
 
-    // Return success response with posts and pagination data
+    // Return success response with paginated posts and pagination info
     return new Response(
       JSON.stringify({
         posts,
-        total: totalDocuments,
-        pages: Math.ceil(totalDocuments / limit),
+        total,
         page: page,
+        pages: Math.ceil(total / limit),
       }),
       { status: 200 }
     );

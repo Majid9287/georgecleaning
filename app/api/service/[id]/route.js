@@ -13,7 +13,7 @@ export const GET = async (req, { params }) => {
     const { id } = params;
 
     // Fetch the service by its ID
-    const service = await Service.findById(id);
+    const service = await Service.findOne({slug:id});
 
     if (!service) {
       return new Response(JSON.stringify({ message: "Service not found" }), {

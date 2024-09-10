@@ -4,7 +4,8 @@ import Link from "next/link";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { BsArrowRight, BsArrowLeft } from "react-icons/bs";
 import ConfirmationModal from "@components/DeleteConfirmation";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const statuses = [
   { status: "processing", color: "text-yellow-500" },
   { status: "booked", color: "text-green-500" },
@@ -20,6 +21,8 @@ const CardList = () => {
   const [loading, setLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showConfirmation1, setShowConfirmation1] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("pending confirmation");
   const [selectedIds, setSelectedIds] = useState([]);
   const [page, setPage] = useState(1);
@@ -29,7 +32,8 @@ const CardList = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/booking?status=${selectedStatus}&page=${page}&limit=10`
+        `/api/booking?status=${selectedStatus}&page=${page}&limit=10`,
+        { next: { revalidate: 10 } }
       );
       const data = await response.json();
       setBookings(data.bookings);
@@ -56,13 +60,11 @@ const CardList = () => {
   };
 
   const handleConfirmDelete = async () => {
+    setDeleteLoading(true);
     try {
-      const response = await fetch(
-        `/api/bookings/delete-booking?bookingId=${selectedBooking}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`/api/booking/${selectedBooking}/delete`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         setBookings((prevBookings) =>
@@ -76,17 +78,23 @@ const CardList = () => {
     } finally {
       setSelectedBooking(null);
       setShowConfirmation(false);
+      setDeleteLoading(false);
     }
   };
 
   const handleCancelDelete = () => {
     setSelectedBooking(null);
     setShowConfirmation(false);
+    setShowConfirmation1(false);
+    setSelectedIds([]);
   };
-
+  const handleDeleteAll = () => {
+    setShowConfirmation1(true);
+  };
   const handleDeleteSelected = async () => {
+    setDeleteLoading(true);
     try {
-      const response = await fetch("/api/bookings/delete-selected", {
+      const response = await fetch("/api/booking/delete_all", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -104,6 +112,9 @@ const CardList = () => {
       }
     } catch (error) {
       console.error("Error deleting selected bookings:", error);
+    } finally {
+      setDeleteLoading(false);
+      setShowConfirmation1(false);
     }
   };
 
@@ -125,6 +136,18 @@ const CardList = () => {
 
   return (
     <section className="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen">
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="w-full px-2 py-2 md:py-12 ">
         <div className="flex items-center justify-left mb-6 border p-1">
           <h2 className="text-2xl font-bold text-gray-800">Booking Details</h2>
@@ -157,7 +180,7 @@ const CardList = () => {
                 Deselect All
               </button>
               <button
-                onClick={handleDeleteSelected}
+                onClick={handleDeleteAll}
                 className="ml-2 px-4 py-2 bg-yellow-500 text-white rounded-md"
               >
                 Delete Selected
@@ -263,7 +286,7 @@ const CardList = () => {
                       <td className="px-6 py-4 whitespace-nowrap ">
                         <div className="flex text-center">
                           <Link
-                            href={`/adminDashboard/booking/update-booking/${booking._id}`}
+                            href={`/dashboard/bookings/${booking._id}/update`}
                           >
                             <BiEdit className="text-blue-500  text-2xl" />
                           </Link>
@@ -318,11 +341,20 @@ const CardList = () => {
           )
         )}
       </div>
-
+      {showConfirmation1 && (
+        <ConfirmationModal
+          isLoading={deleteLoading}
+          onConfirm={handleDeleteSelected}
+          onCancel={handleCancelDelete}
+          text="Are you sure you want to delete this selected Bookings"
+        />
+      )}
       {showConfirmation && (
         <ConfirmationModal
+          isLoading={deleteLoading}
           onConfirm={handleConfirmDelete}
           onCancel={handleCancelDelete}
+          text="Are you sure you want to delete this Booking"
         />
       )}
     </section>

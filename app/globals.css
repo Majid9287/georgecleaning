@@ -31,3 +31,33 @@ body {
     text-wrap: balance;
   }
 }
+
+
+.embed-responsive {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.embed-responsive-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+
+.col-sm-6 {
+    @apply w-full sm:w-1/2 px-4;
+}
+
+.row {
+    @apply flex flex-wrap -mx-4;
+}

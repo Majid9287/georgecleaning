@@ -3,6 +3,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { FaArrowLeft, FaEdit, FaPrint, FaTrashAlt } from 'react-icons/fa';
 import axios from 'axios';
+import Link from "next/link";
 import LoadingSkeleton from "@components/LoadingSkeleton";
 export default function BookingDetails() {
   const router = useRouter();
@@ -18,7 +19,13 @@ export default function BookingDetails() {
   }, [id]);
 
   const handlePrint = () => {
+    const printContent = document.getElementById('printableArea').innerHTML;
+    const originalContent = document.body.innerHTML;
+
+    document.body.innerHTML = printContent;
     window.print();
+    document.body.innerHTML = originalContent;
+    window.location.reload(); // Reload to restore the original content
   };
 
   if (!booking) {
@@ -39,17 +46,16 @@ export default function BookingDetails() {
           <button onClick={handlePrint} className="text-green-500 hover:text-green-700">
             <FaPrint size={28} />
           </button>
+          <Link href={`/dashboard/bookings/${id}/update`}>
           <button className="text-yellow-500 hover:text-yellow-700">
             <FaEdit size={28} />
-          </button>
-          <button className="text-red-500 hover:text-red-700">
-            <FaTrashAlt size={28} />
-          </button>
+          </button></Link>
+         
         </div>
       </div>
 
       {/* Booking Details */}
-      <div className="bg-white p-8 rounded-lg shadow-xl">
+      <div className="bg-white p-8 rounded-lg shadow-xl" id="printableArea">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-extrabold text-gray-900">{booking.personalInfo.name}</h1>

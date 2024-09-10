@@ -8,7 +8,7 @@ import { Navigation } from "swiper/modules";
 SwiperCore.use([Navigation]);
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
-
+import { FaRegUserCircle } from "react-icons/fa";
 function ReviewCard({ review }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -28,13 +28,7 @@ function ReviewCard({ review }) {
     style={{ minHeight: `${cardMinHeight}px` }} // Set min-height for consistency
   >
     <div className="flex items-center mb-4">
-      <Image
-        src={review.img}
-        alt={review.name}
-        width={50}
-        height={50}
-        className="w-12 h-12 rounded-full object-cover mr-4"
-      />
+      <FaRegUserCircle className="w-12 h-12 rounded-full object-cover text-[#fcc707] mr-4"/>
       <div>
         <h3 className="text-xl text-[#655fe4] font-semibold">
           {review.name}

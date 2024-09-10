@@ -8,8 +8,8 @@ export const GET = async (req) => {
     await connectToDB();
 
     // Extract the query parameters
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const status = url.searchParams.get('status') || 'Pending Confirmation';
+    const url = new URL(req.url);
+    const status = url.searchParams.get('status') || 'pending confirmation';
     const page = parseInt(url.searchParams.get('page')) || 1; // Default to page 1
     const limit = parseInt(url.searchParams.get('limit')) || 10; // Default to 10 items per page
     const skip = (page - 1) * limit;

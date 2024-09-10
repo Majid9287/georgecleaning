@@ -8,23 +8,32 @@ import { PiDotFill } from "react-icons/pi";
 import { IoIosCloseCircle } from "react-icons/io";
 import { TiThMenu } from "react-icons/ti";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
+import { signOut } from "next-auth/react";
 
 import { BsCalendarCheck, BsListCheck } from "react-icons/bs";
+
 const AdminLayout = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
-  
-  console.log("path", pathname.startsWith("/dashboard/services/"))
+
   const [AccountDropdown, setAccountDropdown] = useState(false);
   const [isUserLoggedIn, setisUserLoggedIn] = useState(true);
   const [isAdmin, setisAdmin] = useState(true);
   const [introDropdownOpen, setintroDropdownOpen] = useState(false);
   const [showSideNav, setShowSideNav] = useState(false); // State to control side navbar visibility
-
+ 
+  useEffect(() => {
+    setShowSideNav(false);
+    
+  }, [pathname]);
+  const handleLogout = async () => {
+    signOut({ callbackUrl: "/" });
+  };
   useEffect(() => {
     // Close the menu when the route changes
     setShowSideNav(false);
   }, [router.asPath]);
+
   const toggleSideNav = () => {
     setShowSideNav(!showSideNav);
   };
@@ -38,11 +47,11 @@ const AdminLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
       <nav
         className={`${
-          showSideNav ? "md:flex" : "hidden" // Use the showSideNav state to control visibility
-        } custom-scrollbar w-full md:w-64 bg-gray-800 md:flex text-white overflow-y-scroll`}
+          showSideNav ? "block" : "hidden"
+        } md:block custom-scrollbar w-full md:w-64 bg-gray-800 text-white overflow-y-scroll`}
         style={{ height: "100vh" }}
       >
         <style>
@@ -68,11 +77,11 @@ const AdminLayout = ({ children }) => {
       `}
         </style>
         <ul className="flex flex-col flex-1">
-          <li className={`px-4 py-6 `}>
+          <li className={`px-4 py-6`}>
             <div className="flex p-2 justify-between">
               <div className="flex">
                 <img
-                  src="/logowhite.png" // Example logo
+                  src="/logowhite.png"
                   alt="Company Logo"
                   className="h-16 w-auto"
                 />
@@ -92,7 +101,8 @@ const AdminLayout = ({ children }) => {
               <Link href="/dashboard/bookings">
                 <div
                   className={`flex items-center justify-between p-2 rounded-md hover:bg-amber-400 ${
-                    pathname.startsWith("/dashboard/bookings")? "bg-amber-500"
+                    pathname.startsWith("/dashboard/bookings")
+                      ? "bg-amber-500"
                       : ""
                   }`}
                 >
@@ -112,7 +122,9 @@ const AdminLayout = ({ children }) => {
                   handleintroDropdown(); // Function to show/hide the dropdown
                 }}
                 className={`flex items-center justify-between p-2 rounded-md hover:bg-amber-400 ${
-                  pathname.startsWith("/dashboard/services")  ? "bg-amber-500" : ""
+                  pathname.startsWith("/dashboard/services")
+                    ? "bg-amber-500"
+                    : ""
                 }`}
               >
                 <div className="flex">
@@ -136,7 +148,9 @@ const AdminLayout = ({ children }) => {
                   <li className={`px-4`}>
                     <div
                       className={`flex p-2 mx-4 rounded-md hover:bg-amber-400 ${
-                         pathname === "/dashboard/services/create" ? "bg-amber-300" : ""
+                        pathname === "/dashboard/services/create"
+                          ? "bg-amber-300"
+                          : ""
                       }`}
                     >
                       <PiDotFill className="mr-2 mt-1" />{" "}
@@ -149,7 +163,7 @@ const AdminLayout = ({ children }) => {
                   <li className={`px-4`}>
                     <div
                       className={`flex p-2 mx-4 mt-2 rounded-md hover:bg-amber-400 ${
-                        pathname === "/dashboard/services"? "bg-amber-300" : ""
+                        pathname === "/dashboard/services" ? "bg-amber-300" : ""
                       }`}
                     >
                       <PiDotFill className="mr-2 mt-1" />{" "}
@@ -162,82 +176,56 @@ const AdminLayout = ({ children }) => {
           </div>
           <div>
             <li className={`px-4 py-1`}>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                }}
-                className={`flex items-center justify-between p-2 rounded-md hover:bg-amber-400 ${
-                  pathname === "" ? "bg-amber-500" : ""
-                }`}
-              >
-                <div className="flex">
-                  <FaUser className="mr-2 mt-1" />{" "}
-                  <h1 className="font-bold">User</h1>
+              <Link href="/dashboard/users">
+                <div
+                  className={`flex items-center justify-between p-2 rounded-md hover:bg-amber-400 ${
+                    pathname.startsWith("/dashboard/users")
+                      ? "bg-amber-500"
+                      : ""
+                  }`}
+                >
+                  <div className="flex">
+                    <FaUser className="mr-2 mt-1" />{" "}
+                    <h1 className="font-bold">Users</h1>
+                  </div>
                 </div>
-              </div>
+              </Link>
+            </li>
+          </div>{" "}
+          <div>
+            <li className={`px-4 py-1`}>
+              <Link href="/dashboard/messages">
+                <div
+                  className={`flex items-center justify-between p-2 rounded-md hover:bg-amber-400 ${
+                    pathname.startsWith("/dashboard/messages")
+                      ? "bg-amber-500"
+                      : ""
+                  }`}
+                >
+                  <div className="flex">
+                    <FaEnvelope className="mr-2 mt-1" />{" "}
+                    <h1 className="font-bold">Messages</h1>
+                  </div>
+                </div>
+              </Link>
             </li>
           </div>
-          <Link href="/adminDashboard/message/list">
-            <li className={`px-4 py-1`}>
-              <div
-                className={`flex items-center justify-between p-2 rounded-md hover:bg-amber-400 ${
-                  router.pathname === "" ? "bg-amber-500" : ""
-                }`}
-              >
-                <div className="flex">
-                  <FaEnvelope className="mr-2 mt-1" />{" "}
-                  <h1 className="font-bold">Message</h1>
-                </div>
-              </div>
-            </li>
-          </Link>
-
-          <Link href="/adminDashboard/user/users" className="hidden">
-            <li
-              className={`p-4 hover:bg-amber-400 ${
-                router.pathname === "/adminDashboard/user/users"
-                  ? "bg-amber-500"
-                  : ""
-              }`}
-            >
-              <div className="flex">
-                <FaUser className="mr-2 mt-1" />{" "}
-                <h1 className="font-bold">Users</h1>
-              </div>
-            </li>
-          </Link>
-
-          <Link href="/adminDashboard/message/message" className="hidden">
-            <li
-              className={`p-4 hover:bg-amber-400 ${
-                router.pathname === "/adminDashboard/message//message"
-                  ? "bg-amber-500"
-                  : ""
-              }`}
-            >
-              <div className="flex">
-                <FaEnvelope className="mr-2 mt-1" />{" "}
-                <h1 className="font-bold">Message</h1>
-              </div>
-            </li>
-          </Link>
         </ul>
       </nav>
 
       <main className="flex-1 overflow-y-scroll" style={{ height: "100vh" }}>
-        {/* Header */}
         <nav
           className={`${
-            showSideNav ? "hidden" : "flex" // Use the showSideNav state to control visibility
+            showSideNav ? "hidden" : "flex"
           } h-16 px-2 bg-gray-800 text-white md:flex items-center justify-between md:justify-end`}
         >
           <span className=" flex md:hidden font-bold text-lg cursor-pointer">
             <TiThMenu className="font-bold" onClick={toggleSideNav} />
           </span>
 
-          <div className=" flex  space-x-5  ">
+          <div className="flex space-x-5">
             <span
-              className=" md:flex  hover:text-gray-400"
+              className="md:flex hover:text-gray-400"
               onMouseEnter={() => {
                 handelAccountDropdown(true);
               }}
@@ -253,9 +241,9 @@ const AdminLayout = ({ children }) => {
                 stroke="currentColor"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
@@ -266,34 +254,45 @@ const AdminLayout = ({ children }) => {
                 >
                   <ul className="py-2">
                     {isUserLoggedIn ? (
-                      // If user is logged in, show "Profile" and "Orders" (or "Admin Dashboard" if admin)
                       <>
-                        <Link href="/profile">
-                          <li className=" px-4 py-2 hover:bg-gray-100">
-                            My Account
-                          </li>
-                        </Link>
                         {isAdmin && (
-                          <Link href="/">
-                            <li className="px-4 py-2 hover:bg-gray-100">
+                          <li className="cursor-pointer">
+                            <Link
+                              href="/"
+                              className="text-gray-700 hover:bg-gray-100 block px-4 py-2"
+                            >
                               View as user
-                            </li>
-                          </Link>
-                        )}
-                        <Link href="/">
-                          <li className="px-4 py-2 hover:bg-gray-100">
-                            Logout
+                            </Link>
                           </li>
-                        </Link>
+                        )}
+                        <li
+                          onClick={() => {
+                            handleLogout;
+                          }}
+                          className="cursor-pointer"
+                        >
+                          <div className="text-gray-700 hover:bg-gray-100 block px-4 py-2">
+                            Logout
+                          </div>
+                        </li>
                       </>
                     ) : (
-                      // If user is not logged in, show "Sign In" and "Register"
                       <>
-                        <li className="px-4 py-2 hover:bg-gray-100">
-                          <Link href="/signin">Sign In</Link>
+                        <li className="cursor-pointer">
+                          <Link
+                            href="/sign-in"
+                            className="text-gray-700 hover:bg-gray-100 block px-4 py-2"
+                          >
+                            Login
+                          </Link>
                         </li>
-                        <li className="px-4 py-2 hover:bg-gray-100">
-                          <Link href="/signup">Register</Link>
+                        <li className="cursor-pointer">
+                          <Link
+                            href="/sign-up"
+                            className="text-gray-700 hover:bg-gray-100 block px-4 py-2"
+                          >
+                            Register
+                          </Link>
                         </li>
                       </>
                     )}
@@ -303,6 +302,7 @@ const AdminLayout = ({ children }) => {
             </span>
           </div>
         </nav>
+
         {children}
       </main>
     </div>

@@ -1,17 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { BsArrowRight, BsArrowLeft, BsEye } from "react-icons/bs";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 import ConfirmationModal from "@components/DeleteConfirmation";
 
 const CardList = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const [showConfirmation1, setShowConfirmation1] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -19,7 +23,9 @@ const CardList = () => {
   const fetchServices = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/service?page=${page}&limit=10`);
+      const response = await fetch(`/api/service?page=${page}&limit=10`, {
+        next: { revalidate: 10 },
+      });
       const data = await response.json();
       setServices(data.posts);
       setTotalPages(data.pages);
@@ -48,18 +54,18 @@ const CardList = () => {
 
       if (response.ok) {
         const updatedService = await response.json();
-
-        setServices((prevServices) =>
-          prevServices.map((service) =>
-            service._id === id
-              ? { ...service, status: updatedService.updatedStatus }
-              : service
-          )
-        );
-
-        toast.success(
-          `Service status updated to ${updatedService.updatedStatus}`
-        );
+        if (updatedService && updatedService.updatedStatus) {
+          setServices((prevServices) => {
+            return prevServices.map((service) => {
+              if (service._id === id) {
+                return { ...service, status: updatedService.updatedStatus };
+              }
+              return service;
+            });
+          });
+        } else {
+          toast.error("Updated service data is missing");
+        }
       } else {
         toast.error("Failed to update status");
       }
@@ -77,36 +83,73 @@ const CardList = () => {
     setSelectedIds([]);
   };
 
-  const handleDeleteSelected = () => {
-    setShowConfirmation(true);
+  const handleConfirmDelete = async () => {
+    setDeleteLoading(true);
+    try {
+      const response = await fetch(`/api/service/${selectedService}/delete`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setServices((prev) =>
+          prev.filter((service) => service._id !== selectedService)
+        );
+      } else {
+        toast.error("Error in deleting service.");
+        console.error("Failed to delete service");
+      }
+    } catch (error) {
+      toast.error("Error in deleting service.");
+      console.error("Error deleting service:", error);
+    } finally {
+      setSelectedService(null);
+      setShowConfirmation(false);
+      setDeleteLoading(false);
+    }
+  };
+  const handleDeleteAll = () => {
+    setShowConfirmation1(true);
+  };
+  const handleCancelDelete = () => {
+    setSelectedService(null);
+    setSelectedIds([]);
+    setShowConfirmation1(false);
+    setShowConfirmation(false);
   };
 
-  const handleConfirmDelete = async () => {
+  const handleDeleteSelected = async () => {
+    setDeleteLoading(true);
     try {
-      await Promise.all(
-        selectedIds.map((id) =>
-          fetch(`/api/service/${id}`, {
-            method: "DELETE",
-          })
-        )
-      );
+      const response = await fetch("/api/service/delete_all", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedIds }),
+      });
 
-      setServices((prevServices) =>
-        prevServices.filter((service) => !selectedIds.includes(service._id))
-      );
-
-      setSelectedIds([]);
-      setShowConfirmation(false);
-      toast.success("Selected services deleted successfully.");
+      if (response.ok) {
+        setServices((prevServices) =>
+          prevServices.filter((service) => !selectedIds.includes(service._id))
+        );
+        setSelectedIds([]);
+      } else {
+        toast.error("Error in deleting .");
+        console.error("Failed to delete selected service");
+      }
     } catch (error) {
-      console.error("Error deleting services:", error);
-      toast.error("Error deleting services.");
+      toast.error("Error in deleting service.");
+      console.error("Error deleting selected service:", error);
+    } finally {
+      setDeleteLoading(false);
+      setShowConfirmation1(false);
     }
   };
 
   return (
     <section className="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen">
       <div className="w-full px-2 py-2 md:py-12">
+        <ToastContainer position="top-right" autoClose={1000} />
         <div className="flex items-center justify-left mb-6 border p-1">
           <h2 className="text-2xl font-bold text-gray-800">Service Details</h2>
         </div>
@@ -127,7 +170,7 @@ const CardList = () => {
                 Deselect All
               </button>
               <button
-                onClick={handleDeleteSelected}
+                onClick={handleDeleteAll}
                 className="ml-2 px-4 py-2 bg-yellow-500 text-white rounded-md"
               >
                 Delete Selected
@@ -243,7 +286,7 @@ const CardList = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <Link href={`/dashboard/services/${service._id}`}>
+                        <Link href={`/services/${service.slug}`}>
                           <BsEye className="text-blue-500 text-2xl" />
                         </Link>
                       </td>
@@ -306,10 +349,18 @@ const CardList = () => {
           )
         )}
         <ToastContainer />
-
+        {showConfirmation1 && (
+          <ConfirmationModal
+            isLoading={deleteLoading}
+            onCancel={handleCancelDelete}
+            onConfirm={handleDeleteSelected}
+            text="Are you sure you want to delete the selected services?"
+          />
+        )}
         {showConfirmation && (
           <ConfirmationModal
-            onCancel={() => setShowConfirmation(false)}
+            isLoading={deleteLoading}
+            onCancel={handleCancelDelete}
             onConfirm={handleConfirmDelete}
             text="Are you sure you want to delete the selected services?"
           />

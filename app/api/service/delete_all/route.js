@@ -15,7 +15,7 @@ export const DELETE = async (req) => {
 
     // Parse request body
     const { ids } = await req.json(); // Expecting a JSON array of IDs
-
+console.log(ids)
     if (!Array.isArray(ids) || ids.length === 0) {
       return new Response("No IDs provided", { status: 400 });
     }

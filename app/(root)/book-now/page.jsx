@@ -1,19 +1,25 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import styles from "../../Home.module.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import styles from "../Home.module.css";
+import { FaArrowLeft } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 const BookingPage = () => {
-  const services = [
-    { id: 1, name: "Antiviral Sanitisation" },
-    { id: 2, name: "End of Tenancy Cleaning" },
-    { id: 3, name: "One Off Deep Cleaning" },
-    { id: 4, name: "Carpet/ Rug Cleaning" },
-    { id: 5, name: "Upholstery Cleaning" },
-    { id: 6, name: "Oven Cleaning" },
-    { id: 7, name: "Window Cleaning" },
-    { id: 8, name: "Office Cleaning" },
-  ];
+  const router = useRouter();
+
+  const handleBackClick = () => {
+    router.push("/"); // Redirect to homepage or any other page
+  };
+
+  const [services, setServices] = useState([]);
   const [step, setStep] = useState(1);
+  const [isLoading, setisLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isSubmit, setiSSubmit] = useState(false);
   const [selectedServices, setSelectedServices] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -29,6 +35,26 @@ const BookingPage = () => {
   const [agreement, setAgreement] = useState(false);
   const [errors, setErrors] = useState({});
   const [step1Error, setStep1Error] = useState("");
+
+  useEffect(() => {
+    if (services.length === 0) {
+      setisLoading(true);
+      const fetchServices = async () => {
+        try {
+          const response = await fetch("/api/service/title", {
+            cache: "force-cache",
+          });
+          const data = await response.json();
+          setServices(data.services);
+        } catch (error) {
+          console.error("Failed to fetch services:", error);
+        } finally {
+          setisLoading(false);
+        }
+      };
+      fetchServices();
+    }
+  }, [services]);
 
   useEffect(() => {
     if (step === 2) {
@@ -50,11 +76,11 @@ const BookingPage = () => {
     }
   }, [step]);
 
-  const handleCheckboxChange = (serviceName) => {
+  const handleCheckboxChange = (serviceId, serviceTitle) => {
     setSelectedServices((prev) =>
-      prev.includes(serviceName)
-        ? prev.filter((s) => s !== serviceName)
-        : [...prev, serviceName]
+      prev.some((s) => s.id === serviceId)
+        ? prev.filter((s) => s.id !== serviceId)
+        : [...prev, { id: serviceId, title: serviceTitle }]
     );
   };
 
@@ -78,14 +104,12 @@ const BookingPage = () => {
 
   const validateInputs = () => {
     const newErrors = {};
-    const australianPostcodeRegex = /^\d{4}$/;
-    const australianPhoneRegex = /^(\+61|0)[2-478](\s?\d{4}\s?\d{4}|\d{3}\s?\d{3}|\d{2}\s?\d{2})$/;
+    const australianPhoneRegex =
+      /^(\+61|0)[2-478](\s?\d{4}\s?\d{4}|\d{3}\s?\d{3}|\d{2}\s?\d{2})$/;
 
     if (!formData.name) newErrors.name = "Name is required.";
     if (!australianPhoneRegex.test(formData.phone))
       newErrors.phone = "Invalid Australian phone number.";
-    if (!australianPostcodeRegex.test(formData.postcode))
-      newErrors.postcode = "Invalid Australian postcode.";
     if (!formData.email) newErrors.email = "Email is required.";
     if (!formData.preferredDate)
       newErrors.preferredDate = "Preferred date is required.";
@@ -101,10 +125,12 @@ const BookingPage = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      toast.error("Please fill in all required fields correctly.");
     } else if (!agreement) {
-      alert("Please agree to the terms.");
+      toast.error("Please agree to the terms.");
     } else {
       setErrors({});
+      setLoading(true);
       try {
         const response = await fetch("/api/booking/new", {
           method: "POST",
@@ -112,7 +138,7 @@ const BookingPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            selectedServices,
+            selectedServices: selectedServices.map((service) => service.title), // Send only titles
             personalInfo: formData,
             agreement,
           }),
@@ -120,29 +146,79 @@ const BookingPage = () => {
 
         if (response.ok) {
           const result = await response.json();
-          alert("Booking submitted successfully!");
-          // Optionally, you can navigate or reset the form
+          toast.success("Booking submitted successfully!");
+          setFormData({
+            name: "",
+            phone: "",
+            email: "",
+            postcode: "",
+            address: "",
+            preferredDate: "",
+            preferredTime: "",
+            callingTime: "anytime",
+            notes: "",
+          });
+          setSelectedServices([]);
+          setAgreement(false);
+          setiSSubmit(true);
         } else {
           const error = await response.text();
-          alert(`Failed to submit booking: ${error}`);
+          toast.error(`Failed to submit booking: ${error}`);
         }
       } catch (error) {
         console.error("Error submitting booking:", error);
-        alert("An error occurred while submitting the booking.");
+        toast.error("An error occurred while submitting the booking.");
+      } finally {
+        setLoading(false);
       }
     }
   };
+  if (isSubmit) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-600 via-blue-500 to-indigo-600 text-white p-8">
+        <div className="bg-white mt-32 text-gray-800 rounded-lg shadow-lg p-10 md:p-16 lg:p-20 w-full md:w-3/4 lg:w-1/2 text-center">
+          <h1 className="text-3xl md:text-5xl font-bold mb-6">
+            Thank You for Your Submission!
+          </h1>
+          <p className="text-lg md:text-2xl mb-8">
+            We have received your details. Our team will contact you shortly to
+            confirm your booking. We appreciate your trust in our services!
+          </p>
+          <button
+            onClick={handleBackClick}
+            className="flex items-center justify-center bg-purple-600 text-white font-bold py-3 px-6 rounded-full shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
+          >
+            <FaArrowLeft className="mr-2" />
+            Back to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen mt-24 flex flex-col items-center bg-gray-100">
-      <div className="w-full md:max-w-2xl p-5 py-12 bg-white rounded-lg shadow-md">
+    <div
+      className={`min-h-screen pt-24 flex flex-col px-1 items-center bg-gray-100 ${styles.pattern}`}
+    >
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <div className="w-full md:max-w-2xl p-5 my-24  bg-white rounded-lg shadow-md">
         <div className="mb-5">
           <div className="flex justify-between mb-6">
             <div
               className={`w-1/2 text-center  ${
                 step === 1 ? "font-bold text-indigo-600" : "text-gray-500"
               }`}
-             
             >
               Step 1: Choose Services
             </div>
@@ -150,7 +226,6 @@ const BookingPage = () => {
               className={`w-1/2 text-center  ${
                 step === 2 ? "font-bold text-indigo-600" : "text-gray-500"
               }`}
-             
             >
               Step 2: Personal Information
             </div>
@@ -159,20 +234,39 @@ const BookingPage = () => {
           {step === 1 && (
             <div>
               <h2 className="text-2xl font-semibold mb-4">Choose Services</h2>
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                {services.map(({ id, name }) => (
-                  <label key={id} className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                      checked={selectedServices.includes(name)}
-                      onChange={() => handleCheckboxChange(name)}
-                      className="form-checkbox h-5 w-5 text-indigo-600"
+              {isLoading && (
+                <>
+                  {" "}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 ">
+                    <Skeleton
+                      height={50}
+                      className="w-full px-2"
+                      style={{ marginBottom: "20px" }}
                     />
-                    <span className="block p-2 bg-gray-200 rounded">
-                      {name}
-                    </span>
-                  </label>
-                ))}
+                    <Skeleton
+                      height={50}
+                      className="w-full px-2"
+                      style={{ marginBottom: "20px" }}
+                    />
+                  </div>
+                </>
+              )}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {services &&
+                  services.length > 0 &&
+                  services.map(({ _id, title }) => (
+                    <label key={_id} className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedServices.some((s) => s.id === _id)}
+                        onChange={() => handleCheckboxChange(_id, title)}
+                        className="form-checkbox h-5 w-5 text-indigo-600"
+                      />
+                      <span className="block p-2 bg-gray-200 rounded">
+                        {title}
+                      </span>
+                    </label>
+                  ))}
               </div>
               {step1Error && (
                 <p className="text-red-500 text-sm">{step1Error}</p>
@@ -338,10 +432,17 @@ const BookingPage = () => {
                     Previous
                   </button>
                   <button
-                    type="submit"
-                    className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-500"
+                    className={`flex items-center justify-center text-white px-4 py-2 rounded-md bg-blue-800`}
+                    disabled={loading}
                   >
-                    Submit
+                    {loading ? (
+                      <>
+                        <FaSpinner className="animate-spin mr-2" />
+                        submitting...
+                      </>
+                    ) : (
+                      "Submit"
+                    )}
                   </button>
                 </div>
               </form>
