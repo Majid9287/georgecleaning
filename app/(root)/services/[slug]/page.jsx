@@ -15,7 +15,7 @@ async function getService(slug) {
 }
 
 export async function generateStaticParams() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}}/api/service`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service`, {
     next: { revalidate: 60 },
   });
   if (!res.ok) {
