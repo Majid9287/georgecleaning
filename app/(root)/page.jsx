@@ -104,7 +104,7 @@ export default async function Home() {
       description: "Post Service Guarantee",
     },
   ];
-  const res = await fetch("http://localhost:3000/api/service", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service`, {
     next: { revalidate: 7200 },
   });
   const data = await res.json();
