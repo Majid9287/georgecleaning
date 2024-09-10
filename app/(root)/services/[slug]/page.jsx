@@ -1,7 +1,7 @@
 // app/services/[id]/page.jsx
 import React from "react";
 import Image from "next/image";
-import styles from "@styles/Styles.module.css";
+import styles from "../../../Home.module.css";
 import Link from "next/link";
 
 import { notFound } from "next/navigation";
