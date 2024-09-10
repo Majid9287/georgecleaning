@@ -5,7 +5,7 @@ import { FaCheckCircle, FaStar, FaTools } from "react-icons/fa";
 import ServiceCard from "@components/cards/ServiceCard";
 
 export default async function Services() {
-  const res = await fetch("http://localhost:3000/api/service", { next:{revalidate:10} });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/service`, { next:{revalidate:10} });
   const data = await res.json();
   const services = data.posts.filter(service => service.status === "active");
   return (
